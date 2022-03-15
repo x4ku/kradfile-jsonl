@@ -15,7 +15,7 @@ You can download the latest files here:
 | [`kradfile.jsonl`]   | KRADFILE records       |
 | [`kradfile.json`]    | KRADFILE record schema |
 
-These files are updated automatically every month.
+These files are updated automatically every quarter (four times per year).
 
 ## Usage
 
