@@ -1,0 +1,14 @@
+
+# python
+__pycache__
+*.pyc
+
+# virtual environment
+env
+
+# kradfile
+data/*
+!data/kradfile.jsonl
+
+# junk
+.DS_Store

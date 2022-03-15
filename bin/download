@@ -1,0 +1,55 @@
+#!/usr/bin/env python3
+import logging
+import os
+import requests
+import zipfile
+from io import BytesIO
+from pathlib import Path
+
+
+logging.basicConfig(
+    level=os.getenv('LOG_LEVEL', 'INFO'),
+    format=(
+        '[%(levelname)s] %(asctime)s '
+        '(%(funcName)s:%(lineno)s) '
+        '%(message)s'
+    )
+)
+logger = logging.getLogger(__name__)
+
+KRADFILE_URL = 'http://ftp.edrdg.org/pub/Nihongo/kradzip.zip'
+
+
+def main():
+    data_dir = Path('data')
+    os.makedirs(data_dir, exist_ok=True)
+    download_kradfile(data_dir)
+
+
+def download_kradfile(path):
+    logger.info('Downloading KRADFILE ...')
+    response = requests.get(KRADFILE_URL, stream=True)
+    response.raise_for_status()
+    extract_kradzip(BytesIO(response.content), path)
+    logger.info('Downloaded KRADFILE')
+
+
+def extract_kradzip(file, path):
+    with zipfile.ZipFile(file) as kradzip:
+        for name in kradzip.namelist():
+            extract_kradzip_member(kradzip, name, path)
+
+
+def extract_kradzip_member(kradzip, name, path):
+    with kradzip.open(name) as member:
+        write_member(member, path / name)
+
+
+def write_member(member, path):
+    with open(path, 'w') as file:
+        for line in member:
+            file.write(str(line, 'euc_jp'))
+
+
+if __name__ == '__main__':
+    main()
