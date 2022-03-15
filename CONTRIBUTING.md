@@ -29,14 +29,12 @@ $ bin/test
 
 ## Updating Data Files
 
-Download KRADFILE:
+Download:
 ```sh
 $ bin/download
 ```
 
-The KRADFILE zip will be extracted to the `data/` directory.
-
-Convert KRADFILE:
+Convert:
 ```sh
 $ bin/convert
 ```
