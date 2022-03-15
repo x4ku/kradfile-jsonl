@@ -6,7 +6,8 @@
 
 ## Overview
 
-This project redistributes the [KRADFILE] in the [jsonlines] format.
+This project redistributes the [KRADFILE] (and KRADFILE2) in the [jsonlines]
+format.
 
 You can download the latest files here:
 
