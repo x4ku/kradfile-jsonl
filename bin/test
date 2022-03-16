@@ -7,13 +7,6 @@ from pathlib import Path
 
 bin_dir = Path('bin')
 
-# import bin/download script as a module
-module_path = str(bin_dir / 'download')
-loader = importlib.machinery.SourceFileLoader('download', module_path)
-spec = importlib.util.spec_from_loader('download', loader)
-download = importlib.util.module_from_spec(spec)
-loader.exec_module(download)
-
 # import bin/convert script as a module
 module_path = str(bin_dir / 'convert')
 loader = importlib.machinery.SourceFileLoader('convert', module_path)
@@ -22,23 +15,13 @@ convert = importlib.util.module_from_spec(spec)
 loader.exec_module(convert)
 
 
-class TestDownload(unittest.TestCase):
-
-    pass
-
-
 class TestConvertRecords(unittest.TestCase):
 
-    def test_build_kradfile_record(self):
+    def test_build_record(self):
         self.assertEqual(
-            convert.build_kradfile_record('f : o o b a r'),
+            convert.build_record('f : o o b a r'),
             ['f', ['o', 'o', 'b', 'a', 'r']]
         )
-
-
-class TestConvertStreaming(unittest.TestCase):
-
-    pass
 
 
 if __name__ == '__main__':

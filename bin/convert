@@ -18,37 +18,41 @@ logger = logging.getLogger(__name__)
 
 def main():
     data_dir = Path('data')
-    input_path1 = str(data_dir / 'kradfile')
-    input_path2 = str(data_dir / 'kradfile2')
-    output_path = str(data_dir / 'kradfile.jsonl')
-    convert_kradfile([input_path1, input_path2], output_path)
+    input_paths = [data_dir / 'kradfile', data_dir / 'kradfile2']
+    output_path = data_dir / 'kradfile.jsonl'
+    convert_kradfile(input_paths, output_path)
 
 
 def convert_kradfile(input_paths, output_path):
     logger.info('Converting KRADFILE ...')
-    stream = raw_kradfile_stream(input_paths)
-    stream = kradfile_record_adapter(stream)
+    stream = input_streams(input_paths)
+    stream = record_adapter(stream)
     stream = stream_writer(stream, output_path)
     read_stream(stream)
     logger.info('Converted KRADFILE')
 
 
-def raw_kradfile_stream(paths):
+def input_streams(paths):
     for path in paths:
-        with open(path) as file:
-            for line in file:
-                line = line.strip()
-                if line.startswith('#'):
-                    continue
-                yield line
+        for raw in input_stream(path):
+            yield raw
 
 
-def kradfile_record_adapter(stream):
+def input_stream(path):
+    with open(path) as file:
+        for line in file:
+            line = line.strip()
+            if line.startswith('#'):
+                continue
+            yield line
+
+
+def record_adapter(stream):
     for raw in stream:
-        yield build_kradfile_record(raw)
+        yield build_record(raw)
 
 
-def build_kradfile_record(raw):
+def build_record(raw):
     return [raw[0], raw[4:].split(' ')]
 
 
